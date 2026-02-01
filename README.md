@@ -1,6 +1,6 @@
 # Kubernetes inside Kubernetes" — A Self-Service Multi-Tenant Platform
 A lightweight Cluster-as-a-Service (CaaS) platform using vcluster and ArgoCD. Providing on-demand, isolated Kubernetes environments with a minimal footprint
-
+Self-service Kubernetes virtual cluster platform using vcluster, ArgoCD, and GitOps. Enables developers to provision isolated K8s environments via Git commits.
 # 📖 Overview
 
 In a typical on-prem environment, spinning up a new Kubernetes cluster is slow and resource-heavy. This project demonstrates a Platform Engineering approach to solving that.
