@@ -1,18 +1,133 @@
-# Kubernetes inside Kubernetes" — A Self-Service Multi-Tenant Platform
-A lightweight Cluster-as-a-Service (CaaS) platform using vcluster and ArgoCD. Providing on-demand, isolated Kubernetes environments with a minimal footprint
-Self-service Kubernetes virtual cluster platform using vcluster, ArgoCD, and GitOps. Enables developers to provision isolated K8s environments via Git commits.
-# 📖 Overview
+# vcluster GitOps Platform
 
-In a typical on-prem environment, spinning up a new Kubernetes cluster is slow and resource-heavy. This project demonstrates a Platform Engineering approach to solving that.
+A self-service platform for creating virtual Kubernetes clusters on-demand using GitOps principles.
 
-Instead of creating new VMs, I use vcluster to create fully isolated, "virtual" Kubernetes clusters inside a single namespace of a host cluster. Everything is managed via GitOps (ArgoCD), making cluster creation as easy as pushing a YAML file.
+## 🎯 Project Overview
 
-# 🛠️ The Tech Stack
+This platform enables developers to request isolated Kubernetes clusters by simply committing a YAML file to Git. ArgoCD automatically provisions a virtual cluster (vcluster) in response, providing true "Clusters-as-a-Service."
 
-    Host Cluster: k3d (Lightweight Kubernetes-in-Docker for local dev).
+## 🏗️ Architecture
+```
+Developer → Git Commit → ArgoCD Watches Repo → Deploys vcluster → Isolated K8s Cluster
+```
 
-    Virtualization: vcluster (The core engine).
+**Components:**
+- **Host Cluster**: k3d (Kubernetes v1.35)
+- **GitOps Engine**: ArgoCD
+- **Virtual Clusters**: vcluster
+- **Automation**: ArgoCD ApplicationSet
 
-    GitOps: ArgoCD (Managing the lifecycle of virtual clusters).
+## 📁 Repository Structure
+```
+vcluster-gitops-platform/
+├── README.md
+├── argocd/
+│   ├── applications/
+│   │   └── vcluster-appset.yaml       # ArgoCD ApplicationSet
+│   └── install/
+│       └── argocd-install.yaml        # ArgoCD installation manifests
+├── vclusters/
+│   ├── team-alpha.yaml                # Example: Team Alpha's vcluster
+│   ├── team-beta.yaml                 # Example: Team Beta's vcluster
+│   └── README.md                      # How to request a vcluster
+├── templates/
+│   ├── vcluster-values.yaml           # Default vcluster Helm values
+│   └── request-template.yaml          # Template for developers
+└── docs/
+    ├── architecture.md                # Architecture diagrams
+    ├── setup.md                       # Setup instructions
+    └── usage.md                       # User guide
+```
 
-    Packaging: Helm (Templating the virtual clusters).
+## 🚀 How It Works
+
+### For Developers (Self-Service)
+
+1. Copy `templates/request-template.yaml` to `vclusters/your-team.yaml`
+2. Customize with your team name and resource limits
+3. Commit and push to Git
+4. ArgoCD automatically creates your isolated Kubernetes cluster
+5. Access credentials are provided via Kubernetes secrets
+
+### For Platform Teams
+
+ArgoCD monitors the `vclusters/` directory and automatically:
+- Detects new vcluster requests
+- Validates resource limits
+- Provisions the virtual cluster
+- Manages lifecycle (updates, deletions)
+
+## 💡 Key Features
+
+- ✅ **GitOps-Driven**: All infrastructure as code
+- ✅ **Self-Service**: Developers provision clusters without platform team intervention
+- ✅ **Multi-Tenancy**: Multiple isolated clusters on shared infrastructure
+- ✅ **Cost-Efficient**: Virtual clusters share node resources
+- ✅ **Audit Trail**: Full Git history of all cluster requests
+- ✅ **Declarative**: Kubernetes-native configuration
+
+## 🛠️ Tech Stack
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| Host Cluster | k3d | Lightweight Kubernetes for local dev |
+| Virtual Clusters | vcluster | Isolated K8s environments |
+| GitOps | ArgoCD | Automated deployment pipeline |
+| Version Control | Git/GitHub | Source of truth |
+
+## 📋 Prerequisites
+
+- Docker
+- kubectl
+- k3d
+- vcluster CLI
+- ArgoCD CLI (optional)
+
+## 🏁 Quick Start
+
+### 1. Create Host Cluster
+```bash
+k3d cluster create vcluster-platform \
+  --agents 2 \
+  --port 8080:80@loadbalancer \
+  --port 8443:443@loadbalancer
+```
+
+### 2. Install ArgoCD
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f argocd/install/argocd-install.yaml
+```
+
+### 3. Deploy ApplicationSet
+```bash
+kubectl apply -f argocd/applications/vcluster-appset.yaml
+```
+
+### 4. Request a vcluster
+```bash
+cp templates/request-template.yaml vclusters/my-team.yaml
+# Edit my-team.yaml with your configuration
+git add vclusters/my-team.yaml
+git commit -m "Request vcluster for my-team"
+git push
+```
+
+ArgoCD will automatically provision your cluster!
+
+## 📊 Project Goals
+
+This project demonstrates:
+
+1. **Platform Engineering**: Building internal developer platforms
+2. **Multi-Tenancy**: Secure resource isolation
+3. **GitOps**: Declarative infrastructure management
+4. **Automation**: Reducing manual operational overhead
+5. **Cost Optimization**: Efficient resource utilization
+
+
+## 🔗 Links
+
+- [vcluster Documentation](https://www.vcluster.com/docs)
+- [ArgoCD Documentation](https://argo-cd.readthedocs.io/)
+- [GitOps Principles](https://opengitops.dev/)
