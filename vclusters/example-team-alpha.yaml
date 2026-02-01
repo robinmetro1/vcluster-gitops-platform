@@ -1,0 +1,33 @@
+# Example vcluster for team-alpha
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: team-alpha-vcluster-config
+  namespace: team-alpha
+  labels:
+    app: vcluster
+    team: team-alpha
+data:
+  values.yaml: |
+    # Team Alpha's vcluster configuration
+    
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    
+    storage:
+      size: 5Gi
+    
+    isolation:
+      enabled: true
+    
+    coredns:
+      enabled: true
+    
+    syncer:
+      extraArgs:
+        - --tls-san=team-alpha.local

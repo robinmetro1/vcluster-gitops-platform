@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: vcluster-generator
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/YOUR_GITHUB_USERNAME/vcluster-gitops-platform.git
+      revision: HEAD
+      files:
+      - path: "vclusters/*.yaml"
+  
+  template:
+    metadata:
+      name: 'vcluster-{{path.basename}}'
+      namespace: argocd
+      labels:
+        app: vcluster
+        team: '{{path.basename}}'
+    
+    spec:
+      project: default
+      
+      source:
+        repoURL: https://charts.loft.sh
+        chart: vcluster
+        targetRevision: 0.20.0
+        helm:
+          releaseName: '{{path.basename}}'
+          values: |
+            {{path.basenameNormalized}}
+      
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

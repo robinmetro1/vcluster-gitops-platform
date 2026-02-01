@@ -1,0 +1,42 @@
+# vcluster Request Template
+# Copy this file to vclusters/<your-team-name>.yaml and customize
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: TEAM_NAME-vcluster-config
+  namespace: TEAM_NAME
+  labels:
+    app: vcluster
+    team: TEAM_NAME
+data:
+  values.yaml: |
+    # Team-specific vcluster configuration
+    
+    # Resource limits (adjust based on your team's needs)
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    
+    # Storage size
+    storage:
+      size: 5Gi
+    
+    # Isolation level
+    isolation:
+      enabled: true
+    
+    # Enable/disable features
+    coredns:
+      enabled: true
+
+---
+# Instructions:
+# 1. Replace TEAM_NAME with your actual team name (e.g., team-alpha)
+# 2. Adjust resource limits based on your needs
+# 3. Save to vclusters/<team-name>.yaml
+# 4. Commit and push to trigger automatic provisioning
