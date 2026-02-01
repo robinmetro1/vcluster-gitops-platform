@@ -11,7 +11,7 @@ cp templates/request-template.yaml vclusters/my-team.yaml
 
 ### Step 2: Customize Your Configuration
 
-Edit `vclusters/my-team.yaml`:
+Edit `vclusters/team-my-team.yaml`:
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -77,6 +77,3 @@ kubectl get namespaces
 - **Max Memory Limit**: 8Gi
 - **Max Storage**: 50Gi
 
-## Support
-
-For issues or questions, contact the platform team or open an issue in this repository.

@@ -13,11 +13,11 @@ spec:
   
   template:
     metadata:
-      name: 'vcluster-{{path.basename}}'
+      name: 'vcluster-{{path.basenameNormalized}}'
       namespace: argocd
       labels:
         app: vcluster
-        team: '{{path.basename}}'
+        team: '{{path.basenameNormalized}}'
     
     spec:
       project: default
@@ -27,13 +27,28 @@ spec:
         chart: vcluster
         targetRevision: 0.20.0
         helm:
-          releaseName: '{{path.basename}}'
+          releaseName: '{{path.basenameNormalized}}'
           values: |
-            {{path.basenameNormalized}}
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+              requests:
+                cpu: 200m
+                memory: 256Mi
+            storage:
+              size: 5Gi
+            isolation:
+              enabled: true
+            coredns:
+              enabled: true
+            syncer:
+              extraArgs:
+                - --tls-san={{path.basenameNormalized}}.local
       
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path.basename}}'
+        namespace: '{{path.basenameNormalized}}'
       
       syncPolicy:
         automated:
