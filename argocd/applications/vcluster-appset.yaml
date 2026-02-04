@@ -23,7 +23,7 @@ spec:
       source:
         repoURL: https://charts.loft.sh
         chart: vcluster
-        targetRevision: 0.20.0
+        targetRevision: 0.21.*
         helm:
           releaseName: '{{path.basenameNormalized}}'
           values: |
