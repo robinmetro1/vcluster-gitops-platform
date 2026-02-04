@@ -14,11 +14,9 @@ spec:
   template:
     metadata:
       name: 'vcluster-{{path.basenameNormalized}}'
-      namespace: argocd
       labels:
-        app: vcluster
         team: '{{path.basenameNormalized}}'
-    
+        app: vcluster
     spec:
       project: default
       
