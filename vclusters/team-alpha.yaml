@@ -1,33 +1,36 @@
-# Example vcluster for team-alpha
-apiVersion: v1
-kind: ConfigMap
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: team-alpha-vcluster-config
-  namespace: team-alpha
-  labels:
-    app: vcluster
-    team: team-alpha
-data:
-  values.yaml: |
-    # Team Alpha's vcluster configuration
-    
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-      requests:
-        cpu: 200m
-        memory: 256Mi
-    
-    storage:
-      size: 5Gi
-    
-    isolation:
-      enabled: true
-    
-    coredns:
-      enabled: true
-    
-    syncer:
-      extraArgs:
-        - --tls-san=team-alpha.local
+  name: vcluster-team-alpha
+  namespace: argocd
+spec:
+  project: default
+  
+  source:
+    repoURL: https://charts.loft.sh
+    chart: vcluster
+    targetRevision: 0.31.0
+    helm:
+      releaseName: team-alpha
+      values: |
+        # Minimal valid values for vcluster 0.31.x
+        controlPlane:
+          distro:
+            k3s:
+              enabled: true
+        
+        sync:
+          toHost:
+            pods:
+              enabled: true
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: team-alpha
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

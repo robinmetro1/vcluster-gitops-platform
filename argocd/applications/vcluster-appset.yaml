@@ -13,7 +13,7 @@ spec:
   
   template:
     metadata:
-      name: 'vcluster-{{path.basenameNormalized}}'
+      name: 'vcluster-{{path.filenameNormalized}}'
       labels:
         team: '{{path.basenameNormalized}}'
         app: vcluster
@@ -23,9 +23,9 @@ spec:
       source:
         repoURL: https://charts.loft.sh
         chart: vcluster
-        targetRevision: 0.21.*
+        targetRevision: 0.31.*
         helm:
-          releaseName: '{{path.basenameNormalized}}'
+          releaseName: '{{path.filenameNormalized}}'
           values: |
             resources:
               limits:
