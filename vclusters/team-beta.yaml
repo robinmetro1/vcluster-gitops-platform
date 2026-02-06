@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vcluster-team-beta
+  namespace: argocd
+spec:
+  project: default
+  
+  source:
+    repoURL: https://charts.loft.sh
+    chart: vcluster
+    targetRevision: 0.31.0
+    helm:
+      releaseName: team-beta
+      values: |
+        controlPlane:
+          distro:
+            k3s:
+              enabled: true
+        sync:
+          toHost:
+            pods:
+              enabled: true
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: team-beta
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
