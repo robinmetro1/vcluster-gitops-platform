@@ -8,55 +8,23 @@ spec:
   - git:
       repoURL: https://github.com/robinmetro1/vcluster-gitops-platform.git
       revision: HEAD
-      files:
+      directories:
       - path: "vclusters/*.yaml"
   
   template:
     metadata:
-      name: 'vcluster-{{path.filenameNormalized}}'
-      labels:
-        team: '{{path.basenameNormalized}}'
-        app: vcluster
+      name: '{{path.basename}}'
+      namespace: argocd
     spec:
       project: default
-      
       source:
-        repoURL: https://charts.loft.sh
-        chart: vcluster
-        targetRevision: 0.31.*
-        helm:
-          releaseName: '{{path.filenameNormalized}}'
-          values: |
-            resources:
-              limits:
-                cpu: 1000m
-                memory: 512Mi
-              requests:
-                cpu: 200m
-                memory: 256Mi
-            storage:
-              size: 5Gi
-            isolation:
-              enabled: true
-            coredns:
-              enabled: true
-            syncer:
-              extraArgs:
-                - --tls-san={{path.basenameNormalized}}.local
-      
+        repoURL: https://github.com/robinmetro1/vcluster-gitops-platform.git
+        targetRevision: HEAD
+        path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path.basenameNormalized}}'
-      
+        namespace: argocd
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-        - CreateNamespace=true
-        retry:
-          limit: 5
-          backoff:
-            duration: 5s
-            factor: 2
-            maxDuration: 3m
