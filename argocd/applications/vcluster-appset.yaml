@@ -27,17 +27,34 @@ spec:
         helm:
           releaseName: '{{ .path.filename | replace ".yaml" "" }}'
           values: |
+            # vcluster control plane configuration
             controlPlane:
               distro:
                 k3s:
                   enabled: true
+            
+            # Sync configuration
             sync:
               toHost:
                 pods:
                   enabled: true
+            
+            # Resource quotas for the vcluster
+            policies:
+              resourceQuota:
+                enabled: true
+                quota:
+                  requests.cpu: "2"
+                  requests.memory: "4Gi"
+                  limits.cpu: "4"
+                  limits.memory: "8Gi"
+                  persistentvolumeclaims: "10"
+                  services.loadbalancers: "1"
+      
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .path.filename | replace ".yaml" "" }}'
+      
       syncPolicy:
         automated:
           prune: true
