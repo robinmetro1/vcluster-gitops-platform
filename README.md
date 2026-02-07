@@ -8,7 +8,7 @@ This platform enables developers to request isolated Kubernetes clusters by simp
 
 ### Why This Matters
 
-- 💰 **70% cost reduction** vs. dedicated clusters per team
+- 💰 **cost reduction** vs. dedicated clusters per team
 - ⚡ **5-minute provisioning** time (vs. days for traditional clusters)
 - 🔒 **Complete isolation** between teams
 - 📝 **Full audit trail** via Git history
