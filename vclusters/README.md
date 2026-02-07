@@ -36,7 +36,7 @@ data:
 
 ### Step 3: Commit and Push
 ```bash
-git add vclusters/my-team.yaml
+git add vclusters/team-my-team.yaml
 git commit -m "Request vcluster for my-team"
 git push origin main
 ```
@@ -64,16 +64,7 @@ kubectl get namespaces
 
 ## Current vclusters
 
-| Team | Namespace | Status | Created |
-|------|-----------|--------|---------|
-| (none yet) | - | - | - |
-
-## Resource Limits
-
-- **Default CPU Limit**: 1 core
-- **Default Memory Limit**: 512Mi
-- **Default Storage**: 5Gi
-- **Max CPU Limit**: 4 cores
-- **Max Memory Limit**: 8Gi
-- **Max Storage**: 50Gi
+| Team     | Namespace  | Status  | Created |
+ team-alpha| team-alpha | Running | 0.31.0  |  
+ team-beta | team-beta  | Running | 0.31.0  |
 
