@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vcluster-TEAM_NAME
+  namespace: argocd
+spec:
+  project: default
+  
+  source:
+    repoURL: https://charts.loft.sh
+    chart: vcluster
+    targetRevision: 0.31.0
+    helm:
+      releaseName: TEAM_NAME
+      values: |
+        controlPlane:
+          distro:
+            k3s:
+              enabled: true
+        
+        sync:
+          toHost:
+            pods:
+              enabled: true
+        
+        # Resource quotas - adjust based on team needs
+        policies:
+          resourceQuota:
+            enabled: true
+            quota:
+              requests.cpu: "2"           # Adjust as needed
+              requests.memory: "4Gi"      # Adjust as needed
+              limits.cpu: "4"
+              limits.memory: "8Gi"
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: TEAM_NAME
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+# Instructions:
+# 1. Replace TEAM_NAME with your team name (e.g., team-alpha)
+# 2. Adjust resource quotas based on your needs
+# 3. Save to vclusters/TEAM_NAME.yaml
+# 4. Commit and push to Git
