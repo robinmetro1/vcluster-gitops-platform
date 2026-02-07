@@ -6,10 +6,6 @@ A self-service platform for creating virtual Kubernetes clusters on-demand using
 
 This platform enables developers to request isolated Kubernetes clusters by simply committing a YAML file to Git. ArgoCD automatically provisions a virtual cluster (vcluster) in response, providing true "Clusters-as-a-Service."
 
-## 🏗️ Architecture
-```
-Developer → Git Commit → ArgoCD Watches Repo → Deploys vcluster → Isolated K8s Cluster
-```
 ### Why This Matters
 
 - 💰 **70% cost reduction** vs. dedicated clusters per team
