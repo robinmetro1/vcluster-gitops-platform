@@ -12,7 +12,7 @@ spec:
       repoURL: https://github.com/robinmetro1/vcluster-gitops-platform.git
       revision: HEAD
       files:
-      - path: "vclusters/team-*.yaml"
+      - path: "vclusters/*.yaml"
   
   template:
     metadata:
