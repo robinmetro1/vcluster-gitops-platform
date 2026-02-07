@@ -65,6 +65,8 @@ kubectl get namespaces
 ## Current vclusters
 
 | Team     | Namespace  | Status  | Created |
+
  team-alpha| team-alpha | Running | 0.31.0  |  
+ 
  team-beta | team-beta  | Running | 0.31.0  |
 
